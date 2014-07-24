@@ -49,13 +49,8 @@ public class EndPoints {
 	@ServiceActivator(inputChannel = "personObjChannel", outputChannel = "routerChannel")
 	public Person processPerson(Message<Person> payload) {
 		personRepository.save(payload.getPayload());
-		System.out.println(payload.getPayload().getFirstName());
+		logger.info(payload.getPayload());
 		return payload.getPayload();
-	}
-
-	@ServiceActivator(inputChannel = "router1")
-	public void router1(Message<Person> m) {
-		System.out.println("Message from router 1 " + m.getPayload());
 	}
 
 	@ServiceActivator(inputChannel = "personDataChannel", requiresReply = "false", poller = @Poller(fixedRate = "500"))
@@ -75,25 +70,27 @@ public class EndPoints {
 		}
 	}
 
-	@ServiceActivator(inputChannel = "router2")
-	public void router2(Message<Person> m) {
-		System.out.println("Message from router 2 " + m.getPayload());
-	}
-
 	@ServiceActivator(inputChannel = "splitPersonChannel", outputChannel = "sumAgeChannel")
 	public Message<Long> handleSplitPerson(Message<Person> p) {
-		System.out.println("Message from splitPerson "
+		logger.info("Message from splitPerson "
 				+ p.getPayload().getAge());
 		return MessageBuilder.withPayload(p.getPayload().getAge()).build();
 	}
 
-	@Aggregator(inputChannel = "sumAgeChannel")
-	public void sumPersonAge(List<Message<Long>> ages) {
+	@Aggregator(inputChannel = "sumAgeChannel", outputChannel="totalPersonAgeChannel")
+	public Message<Long> sumPersonAge(List<Message<Long>> ages) {
 		long sum = 0;
 		for (Message<Long> age : ages) {
 			sum += age.getPayload();
 		}
-		System.out.println("Total Ages is : " + sum);
+		logger.info("sumAge aggreator Total Ages is : " + sum);
+		return MessageBuilder.withPayload(sum).build();
+	}
+	
+	@ServiceActivator(inputChannel = "totalPersonAgeChannel")
+	public void totalPersonAgeChannel(Message<Long> p) {
+		logger.info("Message from totalPersonAge@ServiceActivator "
+				+ p.getPayload());
 	}
 
 	@SuppressWarnings("serial")
@@ -109,6 +106,7 @@ public class EndPoints {
 						}
 					}
 				})) {
+					if (p != null && p.getAge() > 0)
 					add(MessageBuilder.withPayload(p).build());
 				}
 			}
@@ -120,10 +118,20 @@ public class EndPoints {
 		if (m.getPayload().getId() % 2 == 0) {
 			return "router1";
 		} else {
-			return "rounter2";
+			return "router2";
 		}
 	}
-
+	
+	@ServiceActivator(inputChannel = "router1")
+	public void router1(Message<Person> m) {
+		logger.info("Message from router 1 " + m.getPayload());
+	}
+	
+	@ServiceActivator(inputChannel = "router2")
+	public void router2(Message<Person> m) {
+		logger.info("Message from router 2 " + m.getPayload());
+	}
+	
 	@Transformer(inputChannel = "personStrChannel", outputChannel = "personObjChannel")
 	public Person transformPerson(String nameVal,
 			@Header("spiltter") String spiltter) {

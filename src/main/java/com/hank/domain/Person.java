@@ -4,6 +4,8 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.validation.constraints.Digits;
+import javax.validation.constraints.NotNull;
 
 @Entity
 public class Person {
@@ -11,10 +13,13 @@ public class Person {
 	@GeneratedValue
 	private long id;
 	@Column
+	@NotNull
 	private String firstName;
 	@Column
+	@NotNull
 	private String lastName;
 	@Column
+	@Digits(message="age.validation", fraction = 0, integer = 200)
 	private Long age;
 
 	public Person() {

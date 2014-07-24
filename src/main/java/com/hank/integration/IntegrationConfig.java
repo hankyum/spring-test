@@ -78,4 +78,9 @@ public class IntegrationConfig {
 	public MessageChannel router2() {
 		return new DirectChannel();
 	}
+	
+	@Bean
+	public MessageChannel totalPersonAgeChannel() {
+		return new DirectChannel();
+	}
 }
