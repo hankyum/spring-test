@@ -14,6 +14,6 @@ public interface PersonGateway {
 	@Gateway(requestChannel = "personStrChannel", replyTimeout = 2, requestTimeout = 200, headers={@GatewayHeader(name="spiltter", value="\\|")})
 	public void createPerson(String nameVal);
 	
-	@Gateway(requestChannel = "personQueryChannel", replyTimeout = 2, requestTimeout = 200, headers={@GatewayHeader(name="spiltter", value="\\|")})
+	@Gateway(requestChannel = "personQueryChannel")
 	public void queryPerson(String query);
 }
