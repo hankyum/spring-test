@@ -1,5 +1,7 @@
 package com.hank.mvc.controller;
 
+import java.util.List;
+
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,9 +21,9 @@ public class PController {
 	private PersonRepository personRepository;
 	
 	@RequestMapping(value = "/person", method=RequestMethod.POST)
-	public ModelAndView person(Model model, @Valid Person person, BindingResult bindingResult) {
-		ModelAndView view = new ModelAndView("person");
-		if (bindingResult.getErrorCount() > 0) {
+	public ModelAndView person(Model model, @Valid Person person, BindingResult errors) {
+		ModelAndView view = new ModelAndView("/person");
+		if (errors.hasErrors()) {
 			return view;
 		}
 		personRepository.save(person);
@@ -30,7 +32,13 @@ public class PController {
 	}
 	
 	@RequestMapping(value = "/person", method=RequestMethod.GET)
-	public ModelAndView person(Person person) {
-		return new ModelAndView("person");
+	public ModelAndView person(Person person, Model model) {
+		model.addAttribute("test", " val");
+		return new ModelAndView("/person");
+	}
+	
+	@RequestMapping(value = "/personList", method=RequestMethod.GET)
+	public List<Person> person() {
+		return (List<Person>) personRepository.findAll();
 	}
 }
