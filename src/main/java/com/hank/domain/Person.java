@@ -6,6 +6,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.validation.constraints.Digits;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 @Entity
 public class Person {
@@ -13,10 +14,10 @@ public class Person {
 	@GeneratedValue
 	private long id;
 	@Column
-	@NotNull
+	@Size(min=2, max=20)
 	private String firstName;
 	@Column
-	@NotNull
+	@Size(min=2, max=20)
 	private String lastName;
 	@Column
 	@Digits(message="age.validation", fraction = 0, integer = 200)

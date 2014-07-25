@@ -1,7 +1,5 @@
 package com.hank.mvc.controller;
 
-import java.util.List;
-
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,8 +35,8 @@ public class PController {
 		return new ModelAndView("/person");
 	}
 	
-	@RequestMapping(value = "/personList", method=RequestMethod.GET)
-	public List<Person> person() {
-		return (List<Person>) personRepository.findAll();
+	@RequestMapping(value = "/personLists", method=RequestMethod.GET)
+	public ModelAndView person() {
+		return new ModelAndView("/personLists");
 	}
 }

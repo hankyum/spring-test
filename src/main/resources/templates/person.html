@@ -3,27 +3,30 @@
 <head>
 <title>Getting Started: Serving Web Content</title>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<link th:href="@{/webjars/bootstrap/3.2.0/css/bootstrap.min.css}" rel="stylesheet" media="screen" />
+<script th:src="@{/webjars/jquery/2.1.1/jquery.min.js}"></script>
 </head>
 <body>
-	<div th:text="${test}"></div>
-	<form action="#" th:action="@{/person}" th:object="${person}" method="post">
-		<ul>
-			<li>
-				<lablel for="${#ids.next('firstName')}">First Name:</lablel>
-				<input type="text" th:field="*{firstName}" /> <span th:errors="*{firstName}" />
-			</li>
-			<li>
-				<lablel for="${#ids.next('lastName')}">Last Name:</lablel>
-				<input type="text" th:field="*{lastName}" /> <span th:errors="*{lastName}" />
-			</li>
-			<li>
-				<lablel for="${#ids.next('age')}">Age:</lablel>
-				<input type="text" th:field="*{age}" /> <span th:errors="*{age}" />
-			</li>
-			<li>
-				<button type="submit">Save</button>
-			</li>
-		</ul>
-	</form>
+	<div style="width:200px">
+		<form action="#" th:action="@{/person}" th:object="${person}" method="post">
+			<ul class="list-group">
+				<li class="list-group-item">
+					<lablel for="${#ids.next('firstName')}">First Name:</lablel>
+					<input type="text" th:field="*{firstName}" /> <span th:if="${#fields.hasErrors('firstName')}" th:errors="*{firstName}" />
+				</li>
+				<li class="list-group-item">
+					<lablel for="${#ids.next('lastName')}">Last Name:</lablel>
+					<input type="text" th:field="*{lastName}" /> <span th:if="${#fields.hasErrors('lastName')}" th:errors="*{lastName}" />
+				</li>
+				<li class="list-group-item">
+					<lablel for="${#ids.next('age')}">Age:</lablel>
+					<input type="text" th:field="*{age}" /> <span th:if="${#fields.hasErrors('age')}" th:errors="*{age}" />
+				</li>
+				<li class="list-group-item">
+					<button type="submit" class="btn btn-xs btn-default">Save</button>
+				</li>
+			</ul>
+		</form>
+	</div>
 </body>
 </html>
