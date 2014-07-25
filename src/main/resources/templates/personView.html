@@ -1,0 +1,22 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<title>Getting Started: Serving Web Content</title>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+</head>
+<body>
+		<ul>
+			<li>
+				First Name:
+				<span th:text="${person.firstName}" />
+			</li>
+			<li>
+				Last Name:
+				 <span th:text="${person.lastName}" />
+			</li>
+			<li>
+				<span th:text="${person.age}" />
+			</li>
+		</ul>
+</body>
+</html>

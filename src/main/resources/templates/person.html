@@ -1,0 +1,28 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<title>Getting Started: Serving Web Content</title>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+</head>
+<body>
+	<form action="#" th:action="@{/person}" th:object="${person}" method="post">
+		<ul>
+			<li>
+				<lablel for="${#ids.next('firstName')}">First Name:</lablel>
+				<input type="text" th:field="*{firstName}" /> <span th:errors="*{firstName}" />
+			</li>
+			<li>
+				<lablel for="${#ids.next('lastName')}">Last Name:</lablel>
+				<input type="text" th:field="*{lastName}" /> <span th:errors="*{lastName}" />
+			</li>
+			<li>
+				<lablel for="${#ids.next('age')}">Age:</lablel>
+				<input type="text" th:field="*{age}" /> <span th:errors="*{age}" />
+			</li>
+			<li>
+				<button type="submit">Save</button>
+			</li>
+		</ul>
+	</form>
+</body>
+</html>
