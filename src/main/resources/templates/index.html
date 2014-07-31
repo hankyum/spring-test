@@ -21,11 +21,8 @@ app.controller("DisplayPersons", [ "$scope", "$http",
 		} ]);
 </script>
 </head>
-<body ng-app="myApp">
-	<div ng-controller="DisplayPersons">
-		<div ng-repeat="p in persons">
-			First Name: {{p.firstName}} <br /> Last Name: {{p.lastName}} <br /> Age: {{p.age}}
-		</div>
-	</div>
+<body>
+	<a href="#" th:href="@{/person}">Create Person Test (Hank's Validation Form)</a>
+	<a href="#" th:href="@{/person1}">Create Person Test (Bootstrapvalidation's Validation Form [Reusing javax.validation Annotation config])</a>
 </body>
 </html>

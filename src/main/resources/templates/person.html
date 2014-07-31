@@ -3,30 +3,113 @@
 <head>
 <title>Getting Started: Serving Web Content</title>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-<link th:href="@{/webjars/bootstrap/3.2.0/css/bootstrap.min.css}" rel="stylesheet" media="screen" />
+<link rel="stylesheet" th:href="@{/webjars/bootstrap/3.2.0/css/bootstrap.min.css}" media="screen" />
+<script th:src="@{/webjars/bootstrap/3.2.0/js/bootstrap.min.js}"></script>
 <script th:src="@{/webjars/jquery/2.1.1/jquery.min.js}"></script>
+
+<script type="text/javascript" th:inline="javascript">
+	/* <![CDATA[ */
+	function alt(msg) {
+		if (console) {
+			console.log(msg);
+		}
+	}
+	$(document).ready(function() {
+		/**
+		Created by Hank **/
+		var data = [[${person.validationConfig}]]
+		for (var name in data) {
+			$("#" + name).blur(validateInput(data, name));
+		}	
+		$("form").submit(function(data) {
+		return function() {
+				var valid = true;
+				for (var name in data) {
+					if (!data[name].validate()) {
+						valid = false;
+					}
+				}
+				if (!valid) {
+					alt("Form not able to submit!")
+				}
+				return valid;
+			}
+		}(data));
+		
+		function validateInput(data, name) {
+			var func =  function() {
+					var constrt = data[name];
+					var el = $("#" + name)
+					var val = el.val();
+					var offset = el.offset();
+					var warnId = el.attr("id") + "_warn";
+					var warn = $("div#" + warnId);
+					if (constrt.type == "Size") {
+						if (val.length < constrt.min || val.length > constrt.max) {
+							if (!constrt.message) {
+								constrt.message = el.parent().find("label").html() + "Must less than " + constrt.max + " and longer than";
+							}
+							if (warn.length == 0) {
+								warn = $("<div class='alert alert-danger' role='alert'>" + constrt.message + "</div>");
+								el.after(warn);
+								warn.css({
+									height: el.css("height"),
+									width: el.css("width")/* ,
+									display: "absolute",
+									index: 1000 */
+								});
+								warn.attr("id", warnId);
+// 								warn.offset({
+// 									left: offset.left,
+// 									top: offset.top 
+// 								});
+							}
+							warn.show("slow");
+							alt(constrt.message);
+							return false;
+						}
+						warn.hide("slow");
+					}
+					return true;
+			}
+			data[name]["validate"] = func;
+			return func;
+		}
+	});
+	/* ]]> */
+</script>
 </head>
 <body>
-	<div style="width:200px">
-		<form action="#" th:action="@{/person}" th:object="${person}" method="post">
-			<ul class="list-group">
-				<li class="list-group-item">
-					<lablel for="${#ids.next('firstName')}">First Name:</lablel>
-					<input type="text" th:field="*{firstName}" /> <span th:if="${#fields.hasErrors('firstName')}" th:errors="*{firstName}" />
-				</li>
-				<li class="list-group-item">
-					<lablel for="${#ids.next('lastName')}">Last Name:</lablel>
-					<input type="text" th:field="*{lastName}" /> <span th:if="${#fields.hasErrors('lastName')}" th:errors="*{lastName}" />
-				</li>
-				<li class="list-group-item">
-					<lablel for="${#ids.next('age')}">Age:</lablel>
-					<input type="text" th:field="*{age}" /> <span th:if="${#fields.hasErrors('age')}" th:errors="*{age}" />
-				</li>
-				<li class="list-group-item">
-					<button type="submit" class="btn btn-xs btn-default">Save</button>
-				</li>
-			</ul>
-		</form>
+	<div class="container">
+		<div class="row">
+			<div class="col-lg-8 col-lg-offset-2">
+				<div class="page-header">
+					<h2>Create Person</h2>
+				</div>
+				<div id="configData"></div>
+				<form action="#" id="person_1" th:action="@{/person}" th:object="${person}" method="post">
+					<ul th:if="${#fields.hasAnyErrors()}" class="list-group alert alert-danger" role="alert">
+						<li class="alert alert-danger list-group-item" th:each="e : ${#fields.detailedErrors()}" th:text="${e}">
+							<span th:text="${e.global}? '*' : ${e.fieldName}">The field name</span> | <span th:text="${e.message}">The error message</span>
+						</li>
+					</ul>
+					<ul class="list-group">
+						<li class="list-group-item">
+							<label for="${#ids.next('firstName')}">First Name:</label> <input class="form-control" type="text" th:field="*{firstName}" />
+						</li>
+						<li class="list-group-item">
+							<label for="${#ids.next('lastName')}">Last Name:</label> <input class="form-control" type="text" th:field="*{lastName}" />
+						</li>
+						<li class="list-group-item">
+							<label for="${#ids.next('age')}">Age:</label> <input class="form-control" type="text" th:field="*{age}" />
+						</li>
+						<li class="list-group-item">
+							<button type="submit" class="btn btn-xs btn-default form-control">Save</button>
+						</li>
+					</ul>
+				</form>
+			</div>
+		</div>
 	</div>
 </body>
 </html>

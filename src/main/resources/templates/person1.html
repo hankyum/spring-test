@@ -1,0 +1,131 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<title>Create Person Using bootstrapvalidator-0.5.0</title>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+
+<link th:href="@{/webjars/bootstrap/3.2.0/css/bootstrap.min.css}" rel="stylesheet" media="screen" />
+<script th:src="@{/webjars/bootstrap/3.2.0/js/bootstrap.min.js}"></script>
+<script th:src="@{/webjars/jquery/2.1.1/jquery.min.js}"></script>
+
+<link rel="stylesheet" th:href="@{/webjars/bootstrapvalidator/0.5.0/css/bootstrapValidator.css}" />
+<script type="text/javascript" th:src="@{/webjars/bootstrapvalidator/0.5.0/js/bootstrapValidator.js}"></script>
+<script type="text/javascript" th:src="@{/webjars/bootstrapvalidator/0.5.0/js/language/zh_CN.js}"></script>
+
+</head>
+<body>
+	<div class="container">
+		<div class="row">
+			<div class="col-lg-8 col-lg-offset-2">
+				<div class="page-header">
+					<h2>Create Person Using bootstrapvalidator-0.5.0</h2>
+				</div>
+				<form action="#" id="person_1" th:action="@{/person1}" th:object="${person}" class="form-horizontal" method="post">
+					<div th:if="${#fields.hasAnyErrors()}" class="form-group alert alert-danger" role="alert">
+						<div class="alert alert-danger list-group-item" th:each="e : ${#fields.detailedErrors()}" th:text="${e}">
+							<span th:text="${e.global}? '*' : ${e.fieldName}">The field name</span> | <span th:text="${e.message}">The error message</span>
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-lg-3 control-label">First Name</label>
+						<div class="col-lg-5">
+							<input type="text" class="form-control" th:field="*{firstName}" />
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-lg-3 control-label">Last Name</label>
+						<div class="col-lg-5">
+							<input type="text" class="form-control" th:field="*{lastName}" />
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-lg-3 control-label">age</label>
+						<div class="col-lg-5">
+							<input type="text" class="form-control" th:field="*{age}" />
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-lg-3 control-label"></label>
+						<div class="col-lg-5">
+							<button type="submit" class="btn btn-xs btn-default form-control">Save</button>
+						</div>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+	<script type="text/javascript" th:inline="javascript">
+		/* <![CDATA[ */
+/* 				var fConfig = {
+						firstName : {
+							validators : {
+								stringLength : {
+									max : 5,
+									min: 2,
+									message : "xxx"
+								}
+							}
+						},
+						lastName : {
+							validators : {
+								stringLength : {
+									max : 5,
+									min: 2,
+									message : "xxx"
+								}
+							}
+						}
+					};  */
+		$(document).ready(function() {
+			$("#person_1").bootstrapValidator({
+				message : 'This value is not valid',
+				feedbackIcons : {
+					valid : 'glyphicon glyphicon-ok',
+					invalid : 'glyphicon glyphicon-remove',
+					validating : 'glyphicon glyphicon-refresh'
+				},
+				fields : responseDataReal()
+
+			})/* .on('error.field.bv', function(e, data) {
+							//console.log('error.field.bv -->', data.element);
+						}).on('success.field.bv', function(e, data) {
+							//console.log('success.field.bv -->', data.element);
+						}).on('added.field.bv', function(e, data) {
+							//console.log('Added element -->', data.field, data.element);
+						}).on('removed.field.bv', function(e, data) {
+							//console.log('Removed element -->', data.field, data.element);
+						}) */;
+		});
+		function responseDataReal() {
+			return  $.parseJSON([[${person.formConfig}]]);
+		}
+		// Data copied from backend print
+		function responseData() {
+			 return {
+					"firstName" : {
+						"validators" : {
+							"stringLength" : {
+								"groups" : "[Ljava.lang.Class;@6bedc67e",
+								"min" : "2",
+								"max" : "20",
+								"payload" : "[Ljava.lang.Class;@4782b18d"
+							}
+						}
+					},
+					"lastName" : {
+						"validators" : {
+							"stringLength" : {
+								"groups" : "[Ljava.lang.Class;@6bedc67e",
+								"min" : "2",
+								"max" : "20",
+								"message" : "age.validation",
+								"payload" : "[Ljava.lang.Class;@4782b18d"
+							}
+						}
+					}
+				}
+		}
+		/* ]]> */
+	</script>
+</body>
+</html>
