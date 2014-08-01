@@ -1,24 +1,25 @@
 package com.hank.domain;
 
-import java.lang.reflect.InvocationTargetException;
-import java.util.Map;
-
-import org.codehaus.jettison.json.JSONException;
-
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.hank.Application;
+import com.hank.mvc.validator.BootstrapValidatorAdapter;
+import com.hank.mvc.validator.HankValidatorAdapter;
 
 public class Obj {
-	public String getFormConfig() {
+	public String getBootstrapValidator() {
 		try {
-			return Application.formValidatinConfig.json(this.getClass());
-		} catch (JSONException e) {
+			return Application.getValidationAdapter(BootstrapValidatorAdapter.class).parse(this.getClass());
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		return null;
 	}
-	
-	public Map<String, Map<String, String>> getValidationConfig() throws IllegalAccessException, InvocationTargetException, JSONException, JsonProcessingException {
-		return Application.formValidatinConfig.validationConfig(this.getClass());
+
+	public String getHankValidator() {
+		try {
+			return Application.getValidationAdapter(HankValidatorAdapter.class).parse(this.getClass());
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return null;
 	}
 }

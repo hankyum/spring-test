@@ -6,15 +6,18 @@ import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 
-import com.hank.mvc.validator.ClientValidationGenerator;
+import com.hank.mvc.validator.AbstractValidationAdapter;
 
 @Configuration
 @ComponentScan
 @EnableAutoConfiguration
 public class Application {
-	public static ClientValidationGenerator formValidatinConfig;
+	private static ConfigurableApplicationContext context;
 	public static void main(String[] args) {
-        ConfigurableApplicationContext context = SpringApplication.run(Application.class, args);
-        formValidatinConfig = context.getBean(ClientValidationGenerator.class);
+        context = SpringApplication.run(Application.class, args);
     }
+	
+	public static AbstractValidationAdapter getValidationAdapter(Class<? extends AbstractValidationAdapter> cls) {
+		return context.getBean(cls);
+	}
 }

@@ -5,6 +5,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.validation.constraints.Digits;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 @Entity
@@ -14,12 +15,15 @@ public class Person extends Obj {
 	private long id;
 	@Column
 	@Size(min=2, max=20)
+	@NotNull
 	private String firstName;
 	@Column
-	@Size(message="age.validation", min=2, max=20)
+	@Size(min=2, max=20)
+	@NotNull
 	private String lastName;
 	@Column
-	@Digits(fraction = 0, integer = 200)
+	@Digits(message="age.validation", fraction = 0, integer = 200)
+	@NotNull
 	private Long age;
 
 	public Person() {
