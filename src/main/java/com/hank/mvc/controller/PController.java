@@ -40,14 +40,14 @@ public class PController {
 	}
 
 	@RequestMapping(value = "/person1", method = RequestMethod.POST)
-	public ModelAndView person1(Model model, @Valid Person person, BindingResult errors) {
+	public Object person1(Model model, @Valid Person person, BindingResult errors) {
 		ModelAndView view = new ModelAndView("/person1");
 		if (errors.hasErrors()) {
 			return view;
 		}
 		personRepository.save(person);
 		model.addAttribute("id", person.getId());
-		return new ModelAndView("personView");
+		return person;
 	}
 
 	@RequestMapping(value = "/msg")
