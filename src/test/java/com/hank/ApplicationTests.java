@@ -5,6 +5,7 @@ import java.io.File;
 import org.apache.commons.io.FileUtils;
 import org.junit.Assert;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.batch.core.launch.JobLauncher;
@@ -20,6 +21,7 @@ import com.hank.integration.PersonGateway;
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(classes = Application.class)
 @WebAppConfiguration
+@Ignore
 public class ApplicationTests {
 	@Autowired
 	private JobLauncher jobLauncher;
