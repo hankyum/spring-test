@@ -1,1 +1,1 @@
-web: java -jar target/datacompare-0.0.1-SNAPSHOT.jar -p $PORT
+web: mvn sprign-boot:run -p $PORT
