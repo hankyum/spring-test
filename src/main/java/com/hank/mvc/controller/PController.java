@@ -28,6 +28,16 @@ public class PController {
 		return new ModelAndView("/index");
 	}
 
+	@RequestMapping(value = "/msg")
+	public String getMessage() {
+		return messageSource.getMessage("age.validation", null, Locale.US);
+	}
+
+	@RequestMapping(value = "/person", method = RequestMethod.GET)
+	public ModelAndView person(Person person, Model model) {
+		return new ModelAndView("/person");
+	}
+
 	@RequestMapping(value = "/person", method = RequestMethod.POST)
 	public ModelAndView person(Model model, @Valid Person person, BindingResult errors) {
 		ModelAndView view = new ModelAndView("/person");
@@ -39,6 +49,11 @@ public class PController {
 		return new ModelAndView("personView");
 	}
 
+	@RequestMapping(value = "/person1", method = RequestMethod.GET)
+	public ModelAndView person1(Person person, Model model) {
+		return new ModelAndView("/person1");
+	}
+
 	@RequestMapping(value = "/person1", method = RequestMethod.POST)
 	public Object person1(Model model, @Valid Person person, BindingResult errors) {
 		ModelAndView view = new ModelAndView("/person1");
@@ -48,21 +63,6 @@ public class PController {
 		personRepository.save(person);
 		model.addAttribute("id", person.getId());
 		return person;
-	}
-
-	@RequestMapping(value = "/msg")
-	public String getMessage() {
-		return messageSource.getMessage("age.validation", null, Locale.US);
-	}
-
-	@RequestMapping(value = "/person", method = RequestMethod.GET)
-	public ModelAndView person(Person person, Model model) {
-		return new ModelAndView("/person");
-	}
-
-	@RequestMapping(value = "/person1", method = RequestMethod.GET)
-	public ModelAndView person1(Person person, Model model) {
-		return new ModelAndView("/person1");
 	}
 
 	@RequestMapping("personLists")

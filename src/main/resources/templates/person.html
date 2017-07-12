@@ -1,140 +1,143 @@
 <!DOCTYPE HTML>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-<title>Getting Started: Serving Web Content</title>
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-<link rel="stylesheet" th:href="@{/webjars/bootstrap/3.2.0/css/bootstrap.min.css}" media="screen" />
-<script th:src="@{/webjars/bootstrap/3.2.0/js/bootstrap.min.js}"></script>
-<script th:src="@{/webjars/jquery/2.1.1/jquery.min.js}"></script>
+    <title>Getting Started: Serving Web Content</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <link rel="stylesheet" th:href="@{/webjars/bootstrap/3.2.0/css/bootstrap.min.css}" media="screen"/>
+    <script th:src="@{/webjars/jquery/2.1.1/jquery.min.js}"></script>
+    <script th:src="@{/webjars/bootstrap/3.2.0/js/bootstrap.min.js}"></script>
+    <script type="text/javascript" th:inline="javascript">
+        /* <![CDATA[ */
+        function alt(msg) {
+            if (console) {
+                console.log(msg);
+            }
+        }
 
-<script type="text/javascript" th:inline="javascript">
-	/* <![CDATA[ */
-	function alt(msg) {
-		if (console) {
-			console.log(msg);
-		}
-	}
-	
-	$(document).ready(function() {
-		(function($) {
-			var fieldValidator = "validator";
-			$.extend($.fn, {
-					validateForm : function(formEle, data) {
-						for (var name in data) {
-							$("#" + name).blur($.fn.validateInput(data, name));
-						}	
-						formEle.submit(function(data) {
-							return function() {
-								var valid = true;
-								for (var name in data) {
-									if (!data[name][fieldValidator]()) {
-										valid = false;
-									}
-								}
-								if (!valid) {
-									alt("Form not able to submit!")
-								}
-								return valid;
-							}
-						}(data));
-					},
-					fieldAlert : function(name, message) {
-						var el = $("#" + name)
-						var warnId = el.attr("id") + "_warn";
-						var warn = $("div#" + warnId);
-						if (warn.length == 0) {
-							var offset = el.offset();
-							warn = $("<div class='alert alert-danger' role='alert'>" + message + "</div>");
-							el.after(warn);
-							warn.css({
-								height: el.css("height"),
-								width: el.css("width")/* ,
-								display: "absolute",
-								index: 1000 */
-							});
-							warn.attr("id", warnId);
-		//								warn.offset({
-		//									left: offset.left,
-		//									top: offset.top 
-		//								});
-						}
-						return warn;
-					},
-					validateInput : function(data, name) {
-						var func =  function() {
-										var constrt = data[name];
-										if ($.fn[constrt.type]) {
-											var valid = $.fn[constrt.type](name, constrt);
-											if (!valid) {
-												$.fn.fieldAlert(name, constrt.message).show("slow");
-												alt(constrt.message);
-											} else {
-												$.fn.fieldAlert(name).hide("slow");
-											}
-											return valid;
-										}
-								};
-						data[name][fieldValidator] = func;
-						return func;
-					},
-					Size : function(name, constrt) {
-						var val = $("#" + name).val();
-						if (val.length < constrt.min || val.length > constrt.max) {
-							if (!constrt.message) {
-								constrt.message = "Must less than " + constrt.max + " and longer than " + constrt.max;
-							}
-							return false;
-						}
-						return true;
-					},
-					Digits : function(name, constrt) {
-						if (isNaN($("#" + name).val())) {
-							if (!constrt.message) {
-								constrt.message = "Must be a number";
-							}
-							return false;
-						} 
-						return true;
-					}				
-			});
-		})($);
-		
-		$.fn.validateForm($("form"), $.parseJSON([[${person.hankValidator}]]));
-	});
-	/* ]]> */
-</script>
+        $(document).ready(function () {
+            (function ($) {
+                var fieldValidator = "validator";
+                $.extend($.fn, {
+                    validateForm: function (formEle, data) {
+                        for (var name in data) {
+                            $("#" + name).blur($.fn.validateInput(data, name));
+                        }
+                        formEle.submit(function (data) {
+                            return function () {
+                                var valid = true;
+                                for (var name in data) {
+                                    if ($("form input#" + name).length && !data[name][fieldValidator]()) {
+                                        valid = false;
+                                    }
+                                }
+                                if (!valid) {
+                                    alt("Form not able to submit!")
+                                }
+                                return valid;
+                            }
+                        }(data));
+                    },
+                    fieldAlert: function (name, message) {
+                        var el = $("#" + name)
+                        var warnId = el.attr("id") + "_warn";
+                        var warn = $("div#" + warnId);
+                        if (warn.length == 0) {
+                            var offset = el.offset();
+                            warn = $("<div class='alert alert-danger' role='alert'>" + message + "</div>");
+                            el.after(warn);
+                            warn.css({
+                                height: el.css("height"),
+                                width: el.css("width")/* ,
+                                 display: "absolute",
+                                 index: 1000 */
+                            });
+                            warn.attr("id", warnId);
+                            //								warn.offset({
+                            //									left: offset.left,
+                            //									top: offset.top
+                            //								});
+                        }
+                        return warn;
+                    },
+                    validateInput: function (data, name) {
+                        var func = function () {
+                            var constrt = data[name];
+                            if ($.fn[constrt.type]) {
+                                var valid = $.fn[constrt.type](name, constrt);
+                                if (!valid) {
+                                    $.fn.fieldAlert(name, constrt.message).show("slow");
+                                    alt(constrt.message);
+                                } else {
+                                    $.fn.fieldAlert(name).hide("slow");
+                                }
+                                return valid;
+                            }
+                        };
+                        data[name][fieldValidator] = func;
+                        return func;
+                    },
+                    Size: function (name, constrt) {
+                        var val = $("#" + name).val();
+                        if (val.length < constrt.min || val.length > constrt.max) {
+                            if (!constrt.message) {
+                                constrt.message = "Must less than " + constrt.min + " and longer than " + constrt.max;
+                            }
+                            return false;
+                        }
+                        return true;
+                    },
+                    Digits: function (name, constrt) {
+                        if (isNaN($("#" + name).val())) {
+                            if (!constrt.message) {
+                                constrt.message = "Must be a number";
+                            }
+                            return false;
+                        }
+                        return true;
+                    }
+                });
+            })($);
+            $.fn.validateForm($("form"), $.parseJSON([[${person.hankValidator}]]));
+        });
+        /* ]]> */
+    </script>
 </head>
 <body>
-	<div class="container">
-		<div class="row">
-			<div class="col-lg-8 col-lg-offset-2">
-				<div class="page-header">
-					<h2>Create Person</h2>
-				</div>
-				<div id="configData"></div>
-				<form action="#" id="person_1" th:action="@{/person}" th:object="${person}" method="post">
-					<ul th:if="${#fields.hasAnyErrors()}" class="list-group alert alert-danger" role="alert">
-						<li class="alert alert-danger list-group-item" th:each="e : ${#fields.detailedErrors()}" th:text="${e}">
-							<span th:text="${e.global}? '*' : ${e.fieldName}">The field name</span> | <span th:text="${e.message}">The error message</span>
-						</li>
-					</ul>
-					<ul class="list-group">
-						<li class="list-group-item">
-							<label for="${#ids.next('firstName')}">First Name:</label> <input class="form-control" type="text" th:field="*{firstName}" />
-						</li>
-						<li class="list-group-item">
-							<label for="${#ids.next('lastName')}">Last Name:</label> <input class="form-control" type="text" th:field="*{lastName}" />
-						</li>
-						<li class="list-group-item">
-							<label for="${#ids.next('age')}">Age:</label> <input class="form-control" type="text" th:field="*{age}" />
-						</li>
-						<li class="list-group-item">
-							<button type="submit" class="btn btn-xs btn-default form-control">Save</button>
-						</li>
-					</ul>
-				</form>
-			</div>
-		</div>
-	</div>
+<div class="container">
+    <div class="row">
+        <div class="col-lg-8 col-lg-offset-2">
+            <div class="page-header">
+                <h2>Create Person</h2>
+            </div>
+            <div id="configData"></div>
+            <form action="#" id="person_1" th:action="@{/person}" th:object="${person}" method="post">
+                <ul th:if="${#fields.hasAnyErrors()}" class="list-group alert alert-danger" role="alert">
+                    <li class="alert alert-danger list-group-item" th:each="e : ${#fields.detailedErrors()}"
+                        th:text="${e}">
+                        <span th:text="${e.global}? '*' : ${e.fieldName}">The field name</span> | <span
+                            th:text="${e.message}">The error message</span>
+                    </li>
+                </ul>
+                <ul class="list-group">
+                    <li class="list-group-item">
+                        <label for="${#ids.next('firstName')}">First Name:</label>
+                        <input class="form-control" type="text" th:field="*{firstName}"/>
+                    </li>
+                    <li class="list-group-item">
+                        <label for="${#ids.next('lastName')}">Last Name:</label>
+                        <input class="form-control" type="text" th:field="*{lastName}"/>
+                    </li>
+                    <li class="list-group-item">
+                        <label for="${#ids.next('age')}">Age:</label>
+                        <input class="form-control" type="text" th:field="*{age}"/>
+                    </li>
+                    <li class="list-group-item">
+                        <button type="submit" class="btn btn-xs btn-default form-control">Save</button>
+                    </li>
+                </ul>
+            </form>
+        </div>
+    </div>
+</div>
 </body>
 </html>

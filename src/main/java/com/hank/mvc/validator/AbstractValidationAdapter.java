@@ -4,12 +4,12 @@ import java.lang.annotation.Annotation;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.HashMap;
-import java.util.Locale;
 import java.util.Map;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
+import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.util.ClassUtils;
 import org.springframework.util.StringUtils;
 
@@ -33,7 +33,7 @@ public abstract class AbstractValidationAdapter {
 				if (r != null && !r.equals(m.getDefaultValue())) {
 					String val = r.toString();
 					if (m.getName().equals("message")) {
-						String configedMsg = getMessageSource().getMessage(val, new Object[] {}, Locale.US);
+						String configedMsg = getMessageSource().getMessage(val, null, LocaleContextHolder.getLocale());
 						if (!StringUtils.isEmpty(configedMsg)) {
 							val = configedMsg;
 						}
