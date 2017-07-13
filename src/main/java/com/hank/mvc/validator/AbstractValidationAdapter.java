@@ -7,6 +7,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.apache.log4j.Logger;
+import org.codehaus.jettison.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
@@ -15,7 +16,7 @@ import org.springframework.util.StringUtils;
 
 public abstract class AbstractValidationAdapter {
 	private static final Logger logger = Logger.getLogger(AbstractValidationAdapter.class);
-	public abstract String parse(Class<?> cls) throws Exception;
+	public abstract JSONObject parse(Class<?> cls) throws Exception;
 	@Autowired
 	private MessageSource messageSource;
 	
@@ -24,7 +25,7 @@ public abstract class AbstractValidationAdapter {
 	}
 	
 	public Map<String, String> parseAnnotation(Annotation a) throws IllegalAccessException, InvocationTargetException {
-		logger.info("Parseing annotation " + a.annotationType().getName());
+		logger.info("Parsing annotation " + a.annotationType().getName());
 		Map<String, String> res = new HashMap<String, String>();
 		for (Method m : a.annotationType().getDeclaredMethods()) {
 			if (ClassUtils.isPrimitiveOrWrapper(m.getReturnType()) || m.getReturnType().isAssignableFrom(String.class)) {
@@ -33,9 +34,9 @@ public abstract class AbstractValidationAdapter {
 				if (r != null && !r.equals(m.getDefaultValue())) {
 					String val = r.toString();
 					if (m.getName().equals("message")) {
-						String configedMsg = getMessageSource().getMessage(val, null, LocaleContextHolder.getLocale());
-						if (!StringUtils.isEmpty(configedMsg)) {
-							val = configedMsg;
+						String configMsg = getMessageSource().getMessage(val, null, LocaleContextHolder.getLocale());
+						if (!StringUtils.isEmpty(configMsg)) {
+							val = configMsg;
 						}
 					}
 					res.put(m.getName(), val);
