@@ -96,7 +96,7 @@
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <start-class>com.hank.Application</start-class>
-        <java.version>1.6</java.version>
+        <java.version>1.8</java.version>
         <angularjs.version>1.3.0-beta.15</angularjs.version>
         <jquery.version>2.1.1</jquery.version>
     </properties>

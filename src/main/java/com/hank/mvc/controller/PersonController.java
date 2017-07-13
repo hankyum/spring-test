@@ -1,9 +1,16 @@
 package com.hank.mvc.controller;
 
+import java.util.Locale;
+
+import javax.validation.Valid;
+
+import com.hank.domain.ValidationConfig;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -11,29 +18,49 @@ import com.hank.dao.PersonRepository;
 import com.hank.domain.Person;
 
 @RestController
-@RequestMapping(value = "/persons")
 public class PersonController {
-
 	@Autowired
 	private PersonRepository personRepository;
+	@Autowired
+	private MessageSource messageSource;
 
-	@RequestMapping
-	public Iterable<Person> persons() {
-		return personRepository.findAll(); 
-	}
-	
-	@RequestMapping(value = "/{id}")
-	public ModelAndView Person(@PathVariable("id") Long id, Model model) {
-		model.addAttribute("person", personRepository.findOne(id));
-		return new ModelAndView("/personView");
+	@RequestMapping(value = "/")
+	public ModelAndView index() {
+		return new ModelAndView("/index");
 	}
 
-	public PersonRepository getPersonRepository() {
-		return personRepository;
+	@RequestMapping(value = "/msg")
+	public String getMessage() {
+		return messageSource.getMessage("age.validation", null, Locale.US);
 	}
 
-	public void setPersonRepository(PersonRepository PersonRepository) {
-		this.personRepository = PersonRepository;
+	@RequestMapping(value = "/person1", method = RequestMethod.GET)
+	public ModelAndView person(Person person, ValidationConfig config) {
+		return new ModelAndView("/person-booststrap-validator");
 	}
 
+	@RequestMapping(value = "/person", method = RequestMethod.POST)
+	public ModelAndView person(Model model, @Valid Person person, BindingResult errors) {
+		if (errors.hasErrors()) {
+			return new ModelAndView("/person-booststrap-validator");
+		}
+		personRepository.save(person);
+		model.addAttribute("id", person.getId());
+		return new ModelAndView("personView");
+	}
+
+	@RequestMapping(value = "/person", method = RequestMethod.GET)
+	public ModelAndView person1(Person person, ValidationConfig config) {
+		return new ModelAndView("/person-own-validator");
+	}
+
+	@RequestMapping(value = "/person1", method = RequestMethod.POST)
+	public Object person1(Model model, @Valid Person person, BindingResult errors) {
+		if (errors.hasErrors()) {
+			return new ModelAndView("/person-own-validator");
+		}
+		personRepository.save(person);
+		model.addAttribute("id", person.getId());
+		return person;
+	}
 }

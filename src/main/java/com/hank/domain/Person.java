@@ -9,7 +9,7 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 @Entity
-public class Person extends Obj {
+public class Person extends ValidationConfig {
 	@Id
 	@GeneratedValue
 	private long id;
