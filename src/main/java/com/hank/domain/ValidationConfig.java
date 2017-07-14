@@ -1,8 +1,8 @@
 package com.hank.domain;
 
 import com.hank.Application;
-import com.hank.mvc.validator.BootstrapValidatorAdapter;
-import com.hank.mvc.validator.HankValidatorAdapter;
+import com.hank.web.validator.BootstrapValidatorAdapter;
+import com.hank.web.validator.HankValidatorAdapter;
 
 public class ValidationConfig {
 

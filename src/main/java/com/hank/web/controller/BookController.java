@@ -1,4 +1,4 @@
-package com.hank.mvc.controller;
+package com.hank.web.controller;
 
 import com.hank.dao.BookRepository;
 import com.hank.domain.Book;
